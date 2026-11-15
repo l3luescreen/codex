@@ -14,6 +14,7 @@ Catalog URL (paste into Plugin Hub → Custom catalogs):
 ## Releasing an update
 
 1. Change the files in the plugin folder and raise `version` in its `manifest.json`.
-2. Commit, then tag the commit `<plugin>-v<version>` (for example `lookup-history-v1.0.1`).
-3. In `catalog.json`, set the same `version`, `release` and the tag inside `base`.
-4. Push the branch and the tag. Plugin Hub then shows **Update**.
+2. Commit and push the plugin files.
+3. In `catalog.json`, set the same `version`, put that commit's hash in `release` (short) and in
+   `base` (full). Pinning to a commit keeps installs reproducible.
+4. Commit and push `catalog.json`. Plugin Hub then shows **Update**.

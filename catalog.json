@@ -9,9 +9,13 @@
       "author": "l3luescreen",
       "version": "1.0.0",
       "repository": "l3luescreen/codex",
-      "release": "lookup-history-v1.0.0",
-      "base": "https://raw.githubusercontent.com/l3luescreen/codex/lookup-history-v1.0.0/lookup-history/",
-      "files": ["manifest.json", "plugin.js", "README.md"]
+      "release": "102395e",
+      "base": "https://raw.githubusercontent.com/l3luescreen/codex/102395e66cb9ea9ced894e9c027fb68783b74b6c/lookup-history/",
+      "files": [
+        "manifest.json",
+        "plugin.js",
+        "README.md"
+      ]
     }
   ]
 }
