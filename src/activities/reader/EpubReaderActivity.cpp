@@ -551,6 +551,7 @@ void EpubReaderActivity::startClipSelection(const int initialX, const int initia
         requestUpdate();
         return;
       }
+      lookup->setHistoryContext(bookTitle, author, chapterTitle, startPage + 1);
       startActivityForResult(std::move(lookup), [this](const ActivityResult& result) {
         if (!result.isCancelled && !mappedInput.hasTouch()) openDictionaryWordSelect();
       });

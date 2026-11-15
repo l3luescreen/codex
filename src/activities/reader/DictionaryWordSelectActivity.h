@@ -8,6 +8,7 @@
 
 #include "activities/Activity.h"
 #include "util/Dictionary.h"
+#include "util/LookupHistory.h"
 
 // Controller for dictionary lookup: renders the background page, runs the
 // lookup against the active StarDict dictionary, and either opens
@@ -28,6 +29,10 @@ class DictionaryWordSelectActivity final : public Activity {
   void loop() override;
   void render(RenderLock&&) override;
 
+  // Where the word was selected, for the lookup history (util/LookupHistory.h).
+  // Without this call the lookup is not recorded.
+  void setHistoryContext(std::string book, std::string author, std::string chapter, int page);
+
  private:
   enum class Popup : uint8_t { None, Busy, NotFound, Error };
 
@@ -44,6 +49,9 @@ class DictionaryWordSelectActivity final : public Activity {
   bool dictOpenAttempted = false;
   bool dictOpenOk = false;
   bool dictNeedsIndex = false;
+
+  bool recordHistory = false;
+  lookuphistory::Record historyRecord;
 
   Popup popup = Popup::None;
   StrId popupMsg = StrId::STR_DICT_NOT_FOUND;

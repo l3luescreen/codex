@@ -56,6 +56,26 @@ On the very first lookup with a dictionary (and again whenever the `.idx` or `.s
 3. **Stemming** — still no match: common English word forms are retried automatically: possessives and plurals (`dogs` → `dog`, `stories` → `story`) and verb endings (`walked` → `walk`, `running` → `run`, `making` → `make`).
 4. **Not found** — a short popup appears. Touchscreen devices return to reading; buttons-only devices return to word selection.
 
+## Lookup History
+
+Each lookup started from an EPUB page adds one line to `/Lookup History.tsv` at the root of the SD card. Words the dictionary does not have are recorded too, so you can collect them. Lookups that fail with a read or memory error are not recorded, and an SD-card write failure does not interrupt the dictionary.
+
+The file is UTF-8 text with tab-separated columns and a header line:
+
+`time`, `book`, `author`, `chapter`, `page`, `word`, `headword`, `found`, `dictionary`
+
+- `time` is local time (`YYYY-MM-DD HH:MM`). It is empty until the clock has been set, for example by a Wi-Fi time sync.
+- `page` is the 1-based page within the chapter at lookup time.
+- `word` is the selected text. `headword` is the matched dictionary entry, which can differ (`walked` → `walk`). It is empty when `found` is `no`.
+- `found` is `yes` or `no`.
+- `dictionary` is the dictionary folder name.
+
+Each field is limited to 200 bytes, and tabs or line breaks inside a field become spaces. When the file reaches 2 MB, it is renamed to `/Lookup History old.tsv`, replacing any earlier copy, and a new file is started.
+
+Not recorded: lookups made from inside a definition screen, and lookups outside EPUB books.
+
+To get the file, open File Transfer and download `Lookup History.tsv` from the root folder. It opens in a spreadsheet app or a text editor.
+
 ## The Definition Screen
 
 When a word is found, the definition screen shows the matched headword at the top and the definition text below, with a page counter for long definitions. A word that maps to several definitions shows them one after another, each labelled with its headword. Definitions that exceed the remaining size limit are skipped, and later definitions are still considered. If no labelled definition fits, the first definition is shown alone without an extra label.

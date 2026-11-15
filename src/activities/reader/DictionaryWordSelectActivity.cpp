@@ -27,6 +27,15 @@ void DictionaryWordSelectActivity::onEnter() {
   requestUpdate();
 }
 
+void DictionaryWordSelectActivity::setHistoryContext(std::string book, std::string author, std::string chapter,
+                                                     const int page) {
+  historyRecord.book = std::move(book);
+  historyRecord.author = std::move(author);
+  historyRecord.chapter = std::move(chapter);
+  historyRecord.page = page;
+  recordHistory = true;
+}
+
 void DictionaryWordSelectActivity::performLookup() {
   {
     RenderLock lock;
@@ -58,6 +67,17 @@ void DictionaryWordSelectActivity::performLookup() {
   std::string headword;
   Dictionary::LookupResult result = Dictionary::LookupResult::NotFound;
   const bool found = ok && dict.lookup(lookupText.c_str(), definition, headword, &result);
+
+  // Record found words and real misses, not read or memory errors.
+  // Before `headword` and `lookupText` are moved below.
+  if (recordHistory && ok && (found || result == Dictionary::LookupResult::NotFound)) {
+    lookuphistory::Record record = historyRecord;
+    record.word = lookupText;
+    if (found) record.headword = headword;
+    record.found = found;
+    record.dictionary = SETTINGS.dictionaryName;
+    lookuphistory::append(record);
+  }
 
   if (found) {
     {
