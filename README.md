@@ -9,6 +9,7 @@ Catalog URL (paste into Plugin Hub → Custom catalogs):
 
 | Plugin | What it does |
 |---|---|
+| `reading-room` | Offline bookshelf and reading history. Source: [l3luescreen/reading-room](https://github.com/l3luescreen/reading-room). |
 | `lookup-history` | Shows `/Lookup History.tsv` (written by the `lookup-history` firmware branch) on the Files page, with search, a book filter and CSV download. |
 
 ## Releasing an update
