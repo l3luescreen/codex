@@ -7,10 +7,10 @@
       "title": "Lookup History",
       "description": "See every word you looked up in the dictionary, by book. Download as CSV for your phone or computer.",
       "author": "l3luescreen",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "repository": "l3luescreen/codex",
-      "release": "102395e",
-      "base": "https://raw.githubusercontent.com/l3luescreen/codex/102395e66cb9ea9ced894e9c027fb68783b74b6c/lookup-history/",
+      "release": "07c8987",
+      "base": "https://raw.githubusercontent.com/l3luescreen/codex/07c8987cd59f635a634a8258b55be2a636683c91/lookup-history/",
       "files": [
         "manifest.json",
         "plugin.js",
