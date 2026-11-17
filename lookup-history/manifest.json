@@ -3,7 +3,7 @@
   "title": "Lookup History",
   "description": "See every word you looked up in the dictionary, by book. Download as CSV for your phone or computer.",
   "author": "l3luescreen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "mount": "files",
   "compatibility": {
     "firmware_family": ["crosspoint"],

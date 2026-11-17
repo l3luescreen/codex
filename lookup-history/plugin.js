@@ -2,7 +2,9 @@
 // /Lookup History.tsv (and the old archive), with search, a book
 // filter, a "not found only" switch, and CSV/TSV downloads.
 CrossPoint.registerPlugin(async (container, api) => {
-  const FILES = ['/Lookup History old.tsv', '/Lookup History.tsv'];
+  // Oldest first. The /.crosspoint paths come from the first test build.
+  const FILES = ['/.crosspoint/lookup-history-old.tsv', '/.crosspoint/lookup-history.tsv',
+    '/Lookup History old.tsv', '/Lookup History.tsv'];
   const COLUMNS = ['time', 'book', 'author', 'chapter', 'page', 'word', 'headword', 'found', 'dictionary'];
 
   const el = (tag, props, ...children) => {
@@ -44,7 +46,7 @@ CrossPoint.registerPlugin(async (container, api) => {
       el('p', {
         textContent:
           'No lookups recorded yet. Look up a word while reading (reader menu > Look Up), then refresh this page. ' +
-          'This needs the lookup-history firmware.',
+          'This needs the lookup-history firmware (from 15 Nov 2026 or later), and works for EPUB books only.',
       }),
     );
     return;
