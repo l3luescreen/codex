@@ -22,10 +22,10 @@
       "title": "Reading Room",
       "description": "Your own bookshelf and reading history, kept on the SD card. No account, no internet.",
       "author": "l3luescreen",
-      "version": "0.1.1",
+      "version": "0.2.0",
       "repository": "l3luescreen/reading-room",
-      "release": "e846c01",
-      "base": "https://raw.githubusercontent.com/l3luescreen/reading-room/e846c01d4d85f72433cb5de5b603e40e7efe7f42/plugin/reading-room/",
+      "release": "4025f39",
+      "base": "https://raw.githubusercontent.com/l3luescreen/reading-room/4025f39db3c75a003160f88c88f12d1b1566c211/plugin/reading-room/",
       "files": [
         "manifest.json",
         "device.json",
