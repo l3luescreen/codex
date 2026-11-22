@@ -11,7 +11,10 @@ uint16_t ReaderSession::clampProgress(const int progressBp) {
   return static_cast<uint16_t>(std::clamp(progressBp, 0, 10000));
 }
 
-void ReaderSession::noteTurn(const bool forward, const bool succeeded) { pendingForward = forward && succeeded; }
+void ReaderSession::noteTurn(const bool forward, const bool succeeded) {
+  pendingForward = forward && succeeded;
+  pendingPageChange = pendingPageChange || succeeded;
+}
 
 void ReaderSession::onRenderComplete(const uint32_t monotonicMs, const int64_t trustedEpoch, const int progressBp) {
   const uint16_t progress = clampProgress(progressBp);
@@ -29,11 +32,17 @@ void ReaderSession::onRenderComplete(const uint32_t monotonicMs, const int64_t t
     }
   }
 
-  anchorMs = monotonicMs;
-  anchorEpoch = trustedEpoch;
-  anchorProgress = progress;
+  // A redraw without a page change (e.g. back from the menu or dictionary)
+  // keeps the page's start time, so time spent there still counts.
+  const bool samePageRedraw = !pendingPageChange && hasAnchor && anchorEpoch > 0 && progress == anchorProgress;
+  if (!samePageRedraw) {
+    anchorMs = monotonicMs;
+    anchorEpoch = trustedEpoch;
+    anchorProgress = progress;
+  }
   hasAnchor = true;
   pendingForward = false;
+  pendingPageChange = false;
 }
 
 void ReaderSession::reset() {
@@ -46,4 +55,5 @@ void ReaderSession::reset() {
   endProgress = 0;
   hasAnchor = false;
   pendingForward = false;
+  pendingPageChange = false;
 }

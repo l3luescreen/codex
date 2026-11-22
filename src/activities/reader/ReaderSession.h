@@ -29,4 +29,5 @@ class ReaderSession {
   uint16_t endProgress = 0;
   bool hasAnchor = false;
   bool pendingForward = false;
+  bool pendingPageChange = false;  // any successful turn or skip since the last render
 };

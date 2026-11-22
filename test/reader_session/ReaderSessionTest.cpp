@@ -111,6 +111,75 @@ TEST(ReaderSession, ResetClearsSummaryAnchorAndPendingTurn) {
   EXPECT_FALSE(session.isEmitWorthy());
 }
 
+TEST(ReaderSession, SamePageRedrawKeepsDwellStart) {
+  // Read 3 min, open the dictionary twice (same page redrawn), then turn.
+  ReaderSession session;
+  anchor(session, 1000, 100, 1000);
+  anchor(session, 181000, 280, 1000);
+  anchor(session, 241000, 340, 1000);
+  turnAndRender(session, true, true, 301000, 400, 1100);
+
+  EXPECT_EQ(session.startTime(), 100);
+  EXPECT_EQ(session.durationSeconds(), 300u);
+  EXPECT_EQ(session.startProgressBp(), 1000);
+  EXPECT_EQ(session.endProgressBp(), 1100);
+}
+
+TEST(ReaderSession, RedrawAtNewPositionStartsNewDwell) {
+  // A jump (table of contents, go to %) redraws at another position.
+  ReaderSession session;
+  anchor(session, 1000, 100, 1000);
+  anchor(session, 61000, 160, 5000);
+  turnAndRender(session, true, true, 71000, 170, 5100);
+
+  EXPECT_EQ(session.startTime(), 160);
+  EXPECT_EQ(session.durationSeconds(), 10u);
+  EXPECT_EQ(session.startProgressBp(), 5000);
+}
+
+TEST(ReaderSession, TurnAtSameWholePercentStartsNewDwell) {
+  // TXT/XTC report whole percents, so a back turn or skip can keep the same value.
+  ReaderSession session;
+  anchor(session, 1000, 100, 500);
+  turnAndRender(session, false, true, 61000, 160, 500);
+  turnAndRender(session, true, true, 71000, 170, 600);
+  EXPECT_EQ(session.durationSeconds(), 10u);
+
+  session.reset();
+  anchor(session, 1000, 100, 500);
+  session.noteTurn(false, true);  // skip
+  session.onRenderComplete(61000, 160, 500);
+  turnAndRender(session, true, true, 71000, 170, 600);
+  EXPECT_EQ(session.durationSeconds(), 10u);
+}
+
+TEST(ReaderSession, FailedTurnKeepsDwellStart) {
+  ReaderSession session;
+  anchor(session, 1000, 100, 1000);
+  turnAndRender(session, true, false, 31000, 130, 1000);
+  turnAndRender(session, true, true, 61000, 160, 1100);
+  EXPECT_EQ(session.durationSeconds(), 60u);
+}
+
+TEST(ReaderSession, SamePageRedrawBeforeClockIsSetStartsNewDwell) {
+  ReaderSession session;
+  anchor(session, 1000, 0, 1000);
+  anchor(session, 61000, 160, 1000);
+  turnAndRender(session, true, true, 71000, 170, 1100);
+
+  EXPECT_EQ(session.startTime(), 160);
+  EXPECT_EQ(session.durationSeconds(), 10u);
+}
+
+TEST(ReaderSession, SamePageRedrawStillCapsOneDwell) {
+  ReaderSession session;
+  anchor(session, 1000, 100, 1000);
+  anchor(session, 3001000, 3100, 1000);
+  turnAndRender(session, true, true, 3601000, 3700, 1100);
+
+  EXPECT_EQ(session.durationSeconds(), 1800u);
+}
+
 TEST(ReaderSession, MonotonicElapsedHandlesMillisWrap) {
   ReaderSession session;
   anchor(session, 0xfffffc18u, 100, 1000);

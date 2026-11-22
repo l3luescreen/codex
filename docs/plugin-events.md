@@ -81,13 +81,17 @@ All values are strings in the event's `vars` object:
 | `end_progress_bp` | monotonic-clamped final progress, 0..10000 basis points |
 | `progress_scale` | literal `10000` |
 
-Only successful ordinary forward turns count. A displayed page contributes
-when it remains visible for at least 2 seconds; one dwell is capped at 1800
-seconds. Reverse turns, chapter skips, failed turns, and shorter displays are
-excluded and re-anchor the timer. At least 10 active seconds and a trustworthy
-positive start time are required. EPUB retains basis-point precision; TXT/XTC
-may report whole-percent steps. The document hash is calculated lazily only
-when an emit-worthy summary and a subscriber both exist.
+Only successful ordinary forward turns count. A page contributes the time from
+when it was shown until the next successful forward turn, if that is at least
+2 seconds; one dwell is capped at 1800 seconds. A redraw of the same page
+without a page change, such as after a failed turn or returning from the
+reader menu or the dictionary, keeps the page's start time, so that time
+counts too. Successful reverse turns, chapter skips, jumps to another
+position, and shorter displays are excluded and re-anchor the timer. At least
+10 active seconds and a trustworthy positive start time are required. EPUB
+retains basis-point precision; TXT/XTC may report whole-percent steps. The
+document hash is calculated lazily only when an emit-worthy summary and a
+subscriber both exist.
 
 `end_time` is deliberately not the wall-clock time of the last interaction.
 Idle gaps are removed, so it always equals `start_time + duration_seconds` and
